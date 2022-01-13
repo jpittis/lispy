@@ -84,13 +84,13 @@ function onInput(element) {
 function evalRepl(element) {
   const program = element.value;
   const ast = parse(program);
-  const env = createEnv();
-  const result = eval(ast, env);
+  const result = eval(ast, globalEnv);
   pushResult(program);
   pushResult('=> ' + String(result));
   element.value = '';
 }
 
+const globalEnv = createEnv();
 const inputField = document.body.children[0];
 const defaultProgram = '(begin (define r 10) (* pi (* r r)))';
 inputField.value = defaultProgram;
