@@ -67,9 +67,31 @@ function eval(ast, env) {
   }
 }
 
-const program = '(begin (define r 10) (* pi (* r r)))';
-const ast = parse(program);
-console.log('ast:', ast);
-const env = createEnv();
-const result = eval(ast, env);
-console.log('result:', result);
+function pushResult(result) {
+  const resultElement = document.createElement('p');
+  resultElement.innerText = result;
+  const parent = document.body;
+  const sibling = parent.children[0].nextSibling;
+  parent.insertBefore(resultElement, sibling);
+}
+
+function onInput(element) {
+  if (event.key === 'Enter') {
+    evalRepl(element);
+  }
+}
+
+function evalRepl(element) {
+  const program = element.value;
+  const ast = parse(program);
+  const env = createEnv();
+  const result = eval(ast, env);
+  pushResult(program);
+  pushResult('=> ' + String(result));
+  element.value = '';
+}
+
+const inputField = document.body.children[0];
+const defaultProgram = '(begin (define r 10) (* pi (* r r)))';
+inputField.value = defaultProgram;
+evalRepl(inputField);
